@@ -1,0 +1,17 @@
+{
+    "require": {
+        "slim/slim": "2.*",
+        "illuminate/database": "*",
+        "aws/aws-sdk-php": "*",
+		"php-gcm/php-gcm": "^1.1.1",
+        "apple/apn-push": "~2.1"
+    },
+    "autoload": {
+        "files": [ "app/config.php", "app/s3_config.php"],
+        "classmap": [ "app/models" ],
+		"psr-4": {
+			  "PHP_GCM\\":"vendor/php-gcm/php-gcm/src",
+              "PHP_APN\\":"vendor/apn-push/src"
+		}
+    }
+}
