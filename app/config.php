@@ -12,7 +12,7 @@ $capsule->addConnection(array(
     'host'      => 'localhost',
     'database'  => 'amasi',
     'username'  => 'root',
-    'password'  => '',
+    'password'  => 'Password@123',
     'charset'   => 'utf8',
     'collation' => 'utf8_general_ci',
     'prefix'    => ''

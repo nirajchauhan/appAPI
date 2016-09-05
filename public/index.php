@@ -22,18 +22,18 @@ require realpath(__DIR__ . '/../vendor/autoload.php');
 $s3_config = require('../app/s3_config.php');
 
 
-$s3 = S3Client::factory([
+/*$s3 = S3Client::factory([
     'key' => $s3_config['s3']['key'],
     'secret' => $s3_config['s3']['secret']
-]);
+]);*/
 
 // Instantiate an Amazon S3 client.
-/*$s3 = new S3Client([
+$s3 = new S3Client([
     'key' => $s3_config['s3']['key'],
     'secret' => $s3_config['s3']['secret'],
     'version' => 'latest',
     'region'  => 'us-west-2'
-]);*/
+]);
 
 $sender = new Sender('AIzaSyB1LrS5_3aQ9V6pnuzh-YWNqDWTlHUwErg');
 
