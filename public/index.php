@@ -1306,6 +1306,7 @@ $app->post('/upload/video', function () use ($app, $s3, $s3_config) {
 $app->post('/upload', function () use ($app, $s3, $s3_config) {
     $app->response()->header("Content-Type", "application/json");
     $allowed = array('image/png', 'image/jpeg', 'video/mp4');
+    print_r($_FILES['uploads']);
     if (!isset($_FILES['uploads'])) {
         $result = [
             "status" => "error",
