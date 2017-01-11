@@ -1192,7 +1192,7 @@ $app->post('/create/user', function () use ($app) {
         $user->time_stamp = date('Y-m-d H:i:s');
         if (($user->save()) > 0) {
             //sending welcome mail
-		sendWelcomeMail($allPostVars["email"], " $allPostVars["first_name"]  $allPostVars["last_name"]");
+		sendWelcomeMail($allPostVars["email"],  $allPostVars["first_name"]);
 	    $result = [
                 "status" => "success",
                 "data" => json_decode($user->toJson())
