@@ -48,7 +48,7 @@ $mail->isSMTP();
 $mail->Host = 'smtp.gmail.com';
 $mail->SMTPAuth = true;
 $mail->Username = 'niraj.1991@gmail.com';
-$mail->Password = '';
+$mail->Password = 'niraj9748258128';
 $mail->SMTPSecure = 'tls';
 $mail->Port = 587;
 $mail->isHTML(true);
@@ -61,11 +61,11 @@ function sendWelcomeMail($email, $name){
 	$mail->Body = 'Dear '.$name.'</br> Welcome to Amasi Live App </br> Thank you and we hope you will enjoy the app experience. </br> Amasi Live Team';
 	//$mail->send();
 	if(!$mail->send()) {
-       		echo 'Message could not be sent.';
-        	echo 'Mailer Error: ' . $mail->ErrorInfo;
-    	} else {
-        	echo 'Message has been sent';
-    	}
+        echo 'Message could not be sent.';
+        echo 'Mailer Error: ' . $mail->ErrorInfo;
+    } else {
+        echo 'Message has been sent';
+    }
 }
 
 
@@ -1167,6 +1167,58 @@ $app->post('/edit/user', function () use ($app) {
         $result = [
             "status" => "error",
             "message" => $error->getMessage()
+        ];
+        print(json_encode($result));
+    }
+
+});
+
+$app->post('/reset/password', function () use ($app) {
+    function randomPassword() {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
+    }
+
+    function sendResetPasswordMail($email, $name, $password) {
+        $mail = $GLOBALS['mail'];
+        $mail->addAddress($email, $name);
+        $mail->Subject = 'Here is your credential for AMASI App';
+        $mail->Body = 'Dear '.$name.'</br> We have reset your password. Here are credential </br> Email: ' .$email. ' Password: ' .$password.'   </br> Amasi Live Team';
+        return $mail->send();
+    }
+
+    try {
+        $app->response->headers->set('Content-Type', 'application/json');
+        $json = $app->request->getBody();
+        $allPostVars = json_decode($json, true);
+        $user = User::where('email', $allPostVars['email'])->get()->first();
+        $unhashedPassword = randomPassword();
+        $user->password = md5($unhashedPassword);
+        $isMailSent = sendResetPasswordMail($allPostVars['email'], 'user', $unhashedPassword); 
+        if($user->save() > 0 && $isMailSent > 0){
+            $data = [
+                "status" => "success",
+                "message" => "Password reset successfully. Check your email for your new password."
+            ]; 
+            print(json_encode($data));
+           
+        } else {
+             $result = [
+                "status" => "error",
+                "message" => "Can't reset password. The user with this email does not exist"
+            ];
+            print(json_encode($result));
+        }
+    } catch (Exception $error) {
+        $result = [
+            "status" => "error",
+            "message" => "Can't reset password! Check with admin."
         ];
         print(json_encode($result));
     }
